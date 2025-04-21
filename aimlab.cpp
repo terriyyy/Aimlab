@@ -23,7 +23,7 @@ Aimlab::Aimlab(QWidget *parent)
     connect(ui->startbutton,&QPushButton::clicked,this,&Aimlab::onStartGameClicked);
     levelButton = ui->levelButton;
     connect(levelButton,&QPushButton::clicked,this,&Aimlab::showDifficultyButtons);
-    QStringList diffNames = {"EZ", "普通", "有点强度", "真强度", "鼠标冒烟"};
+    QStringList diffNames = {"等级一", "等级二", "等级三", "等级四", "等级五"};
     QButtonGroup *diffGroup = new QButtonGroup(this);
     for (int i = 0; i < 5; ++i) {
         QPushButton *btn = new QPushButton(diffNames[i], this);
