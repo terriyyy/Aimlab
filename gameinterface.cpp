@@ -147,7 +147,7 @@ void GameInterface::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event);
     QPainter painter(this);
-    // 可以在这里绘制游戏界面的背景等
+    // 绘制游戏界面的背景
     QPixmap pix2;
     pix2.load(":/picture/beijing1.jpg");
     painter.drawPixmap(0,0,this->width(),this->height(),pix2);
