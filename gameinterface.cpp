@@ -122,7 +122,61 @@ GameInterface::GameInterface(Aimlab* mainWindow,QWidget *parent) : QWidget(paren
     qDebug() << "Current High Score:" << highScore;
     highScoreLabel->setText("历史最高: " + QString::number(highScore));
     initializeSoundEffects();
-   
+    //连击
+    comboLabel = new QLabel(this);
+    comboLabel->setStyleSheet(R"(
+    QLabel {
+        color: #FFD700;
+        font-size: 40px;
+        font-weight: bold;
+        qproperty-alignment: AlignCenter;
+
+    }
+)");
+    //连击相关元素初始化
+    comboLabel->setAlignment(Qt::AlignCenter);
+    comboLabel->setFixedSize(300, 60);  // 设置固定大小
+    comboLabel->move((width()-300)/2, 150);  // 水平居中
+    comboLabel->hide();
+
+    comboProgress = new QProgressBar(this);
+    comboProgress->setRange(0, 5);
+    comboProgress->setTextVisible(false);
+    comboProgress->setFixedSize(300, 15);
+    comboProgress->setStyleSheet(R"(
+    QProgressBar {
+        border: 2px solid #FFD700;
+        border-radius: 7px;
+        background: rgba(30,30,30,200);
+        height: 15px;
+    }
+    QProgressBar::chunk {
+        background: qlineargradient(x1:0,y1:0,x2:1,y2:0,
+            stop:0 #FF416C, stop:1 #FF4B2B);
+        border-radius: 5px;
+        border: 1px solid #FFD700;
+    }
+)");
+    comboProgress->move((width()-300)/2, 220);  // 水平居中
+    comboProgress->hide();
+    QGraphicsDropShadowEffect *textShadow = new QGraphicsDropShadowEffect;
+    textShadow->setBlurRadius(4);
+    textShadow->setOffset(2, 2);
+    textShadow->setColor(Qt::black);
+    comboLabel->setGraphicsEffect(textShadow);
+
+    comboTimeoutTimer = new QTimer(this);
+    comboTimeoutTimer->setSingleShot(true);
+    connect(comboTimeoutTimer, &QTimer::timeout, [this]{
+        combo = 0;
+        comboLabel->hide();
+        comboProgress->hide();
+    });
+    view->lower(); // 确保视图在底层
+    comboProgress->raise(); // 确保进度条在顶层
+    comboProgress->setValue(1); // 设置初始值避免空白
+    comboLabel->setAttribute(Qt::WA_TranslucentBackground);
+    comboProgress->setAttribute(Qt::WA_TranslucentBackground);
 
     // 统计界面元素初始化
     accuracyLabel = new QLabel(this);
